@@ -1,2 +1,1 @@
-[{"id": 1, "title": "Книга 1", "author": "Автор1", "year": "1234", "status": "выдана"}, {"id": 2, "title": "Книга 2", "author": "Автор2", "year": "1345", "status": "выдана"}]
-
+[{"id": 1, "title": "Книга 1", "author": "Автор1", "year": "1234", "status": "выдана"}, {"id": 2, "title": "Книга 2", "author": "Автор2", "year": "1345", "status": "выдана"}, {"id": 3, "title": "тест добавления", "author": "автор 3", "year": "1788", "status": "в наличии"}, {"id": 4, "title": "тест добавления", "author": "ghjk", "year": "1234", "status": "в наличии"}, {"id": 5, "title": "ghk", "author": "rtyuio", "year": "1234", "status": "в наличии"}]
