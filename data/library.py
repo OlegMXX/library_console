@@ -27,10 +27,15 @@ class Library:
         return self
 
     def get_book(self, book_id):
-        pass
+        res = None
+        for ind, book in enumerate(self.books):
+            if book.id == book_id:
+                res = ind
+        return res
 
     def delete_book(self, book_id):
-        pass
+        self.books.pop(self.get_book(book_id))
+        return self
 
     def change_status(self, book_id, status):
         pass

@@ -8,7 +8,6 @@ AVAILABLE = "в наличии"
 db_path = 'db/library.json'
 
 
-
 # COMMON
 def get_books_from_json():
     with open(db_path) as f:
@@ -23,6 +22,15 @@ def get_library():
         book_list_of_objects.append(Book(**book_dict))
     library = Library(book_list_of_objects)
     return library
+
+
+def rewrite_json(library):
+    to_json = []
+    for book_object in library.get_books():
+        to_json.append(book_object.__dict__)
+
+    with open('db/library.json', 'w') as f:
+        f.write(json.dumps(to_json, ensure_ascii=False))
 
 
 # GET
@@ -52,3 +60,9 @@ def post_book():
         f.write(json.dumps(to_json, ensure_ascii=False))
 
 
+# DELETE
+def delete_book():
+    id = int(input("ID: "))
+    library = get_library().delete_book(id)
+
+    rewrite_json(library)

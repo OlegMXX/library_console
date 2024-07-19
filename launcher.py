@@ -1,4 +1,4 @@
-from library_console.service.utils import print_all, post_book
+from library_console.service.utils import print_all, post_book, delete_book
 
 def user_interface():
     """
@@ -13,9 +13,11 @@ def user_interface():
             continue
         if command == "add":
             post_book()
+            print("Книга успешно добавлена")
             continue
         if command == "delete":
-            print("Library delete")
+            delete_book()
+            continue
         if command == "search":
             print("Library search")
         if command == "help":
