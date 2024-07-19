@@ -1,3 +1,5 @@
+from service.variables import DB_PATH, AVAILABLE, IS_GIVEN
+
 class Book():
     def __init__(self, id, title, author, year, status):
         self.id = id
@@ -12,5 +14,8 @@ class Book():
     def __gt__(self, other):
         return self.id > other.id
 
-    def change_status(self, status):
-        pass
+    def change_status(self):
+        if self.status == AVAILABLE:
+            self.status = IS_GIVEN
+        else:
+            self.status = AVAILABLE
