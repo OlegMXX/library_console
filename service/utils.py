@@ -1,16 +1,12 @@
 import json
 from library_console.data.book import Book
 from library_console.data.library import Library
-
-IS_GIVEN = "выдана"
-AVAILABLE = "в наличии"
-
-db_path = 'db/library.json'
+from service.variables import DB_PATH, AVAILABLE, IS_GIVEN
 
 
 # COMMON
 def get_books_from_json():
-    with open(db_path) as f:
+    with open(DB_PATH) as f:
         book_list_of_dicts = json.loads(f.read())
         return book_list_of_dicts
 
@@ -29,15 +25,20 @@ def rewrite_json(library):
     for book_object in library.get_books():
         to_json.append(book_object.__dict__)
 
-    with open('db/library.json', 'w') as f:
+    with open(DB_PATH, 'w') as f:
         f.write(json.dumps(to_json, ensure_ascii=False))
 
 
-# GET
 def print_all():
+    selected = get_library().get_books()
+    print_selected(selected)
+
+
+# GET
+def print_selected(selected):
     print("{:<6} | {:<40} | {:<20} | {:<8} | {:<10}".format('id', 'title', 'author', 'year', 'status'))
     print("-"*93)
-    for book_object in get_library().get_books():
+    for book_object in selected:
         book_dict = book_object.__dict__
         print("{:<6} | {:<40} | {:<20} | {:<8} | {:<10}".format(*book_dict.values()))
 
@@ -66,3 +67,17 @@ def delete_book():
     library = get_library().delete_book(id)
 
     rewrite_json(library)
+
+
+# PATCH
+def change_status():
+    id = int(input("ID: "))
+    library = get_library().change_status(id)
+    rewrite_json(library)
+
+
+#SEARCH
+def search_book():
+    pattern = input("Search: ")
+    selected = get_library().search_book(pattern)
+    print_selected(selected)

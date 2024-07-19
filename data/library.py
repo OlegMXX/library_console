@@ -1,4 +1,5 @@
 import json
+import re
 
 
 class Library:
@@ -26,7 +27,7 @@ class Library:
         self.books.append(book)
         return self
 
-    def get_book(self, book_id):
+    def get_book_ind(self, book_id):
         res = None
         for ind, book in enumerate(self.books):
             if book.id == book_id:
@@ -34,8 +35,18 @@ class Library:
         return res
 
     def delete_book(self, book_id):
-        self.books.pop(self.get_book(book_id))
+        self.books.pop(self.get_book_ind(book_id))
         return self
 
-    def change_status(self, book_id, status):
-        pass
+    def change_status(self, book_id):
+        self.books[self.get_book_ind(book_id)].change_status()
+        return self
+
+    def search_book(self, pattern):
+        selected = []
+        for book in self.books:
+            if (re.search(pattern.lower(), book.title.lower()) or
+                    re.search(pattern.lower(), book.author.lower()) or
+                    re.search(pattern, book.year)):
+                selected.append(book)
+        return selected

@@ -1,4 +1,5 @@
-from library_console.service.utils import print_all, post_book, delete_book
+from library_console.service.utils import print_all, post_book, delete_book, change_status, search_book
+
 
 def user_interface():
     """
@@ -13,23 +14,26 @@ def user_interface():
             continue
         if command == "add":
             post_book()
-            print("Книга успешно добавлена")
+            print("The book has been successfully added.")
             continue
         if command == "delete":
             delete_book()
             continue
+        if command == "change status":
+            change_status()
+            continue
         if command == "search":
-            print("Library search")
+            search_book()
+            continue
         if command == "help":
             print("Library help")
-        if command == "change_status":
-            print("Library change status")
+
         else:
             print("Unknown command")
 
 
 def main():
-    print("Welcome to Library Management System.\nType in 'Help' to pull up a list of all the available commands.")
+    print("Welcome to Library Management System.\nType in 'help' to pull up a list of all the available commands.")
 
     user_interface()
 
