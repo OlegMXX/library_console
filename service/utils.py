@@ -57,7 +57,7 @@ def post_book():
     try:
         library = get_library().add_book(Book(id, title, author, year, status))
         to_json = []
-        for book_object in library.get_books():
+        for book_object in library.get_books(all_books=True):
             to_json.append(book_object.__dict__)
 
         with open('db/library.json', 'w') as f:
