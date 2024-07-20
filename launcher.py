@@ -14,7 +14,6 @@ def user_interface():
             continue
         if command == "add":
             post_book()
-            print("The book has been successfully added.")
             continue
         if command == "delete":
             delete_book()

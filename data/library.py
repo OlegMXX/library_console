@@ -1,5 +1,6 @@
 import re
 from service.variables import DELETED
+from errors.errors import BookDoesntExistError
 
 class Library:
     def __init__(self, books):
@@ -9,7 +10,6 @@ class Library:
         """
         Функция возвращает свой атрибут books в виде списка объектов Books, не отображая удаленные
         """
-        res = []
         if all_books:
             res = self.books
         else:
@@ -19,7 +19,8 @@ class Library:
 
     def get_last_id(self):
         """
-        Функция находит максимальный атрибут id в объектах Book в атрибуте books и возвращает его
+        Функция находит максимальный атрибут id в объектах Book в атрибуте books и возвращает его.
+        Можно было по длине списка + 1, но надо же показать перегрузку методов класса Book.
         """
         max_id = max(self.books).id
         return max_id
@@ -40,8 +41,11 @@ class Library:
         return res
 
     def delete_book(self, book_id):
-        self.books[self.get_book_ind(book_id)].mark_as_deleted()
-        return self
+        if book_id in self.get_list_of_ids():
+            self.books[self.get_book_ind(book_id)].mark_as_deleted()
+            return self
+        else:
+            raise BookDoesntExistError
 
     def change_status(self, book_id):
         self.books[self.get_book_ind(book_id)].change_status()
@@ -55,3 +59,6 @@ class Library:
                     re.search(pattern, book.year)):
                 selected.append(book)
         return selected
+
+    def get_list_of_ids(self):
+        return [book.id for book in self.books if book.status != DELETED]

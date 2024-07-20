@@ -2,6 +2,7 @@ import json
 from library_console.data.book import Book
 from library_console.data.library import Library
 from service.variables import DB_PATH, AVAILABLE, IS_GIVEN
+from errors.errors import BookDoesntExistError, IncorrectYearError
 
 
 # COMMON
@@ -24,7 +25,6 @@ def rewrite_json(library):
     to_json = []
     for book_object in library.get_books(all_books=True):
         to_json.append(book_object.__dict__)
-    print(to_json)
 
     with open(DB_PATH, 'w') as f:
         f.write(json.dumps(to_json, ensure_ascii=False))
@@ -45,29 +45,37 @@ def print_selected(selected):
 
 
 # POST
+
 def post_book():
     id = get_library().get_last_id() + 1
     title = input("Title: ")
     author = input("Author: ")
     year = input("Year: ")
+
     status = AVAILABLE
 
-    library = get_library().add_book(Book(id, title, author, year, status))
+    try:
+        library = get_library().add_book(Book(id, title, author, year, status))
+        to_json = []
+        for book_object in library.get_books():
+            to_json.append(book_object.__dict__)
 
-    to_json = []
-    for book_object in library.get_books():
-        to_json.append(book_object.__dict__)
-
-    with open('db/library.json', 'w') as f:
-        f.write(json.dumps(to_json, ensure_ascii=False))
+        with open('db/library.json', 'w') as f:
+            f.write(json.dumps(to_json, ensure_ascii=False))
+        print("The book has been successfully added.")
+    except IncorrectYearError as e:
+        print(e)
 
 
 # DELETE
 def delete_book():
     id = int(input("ID: "))
-    library = get_library().delete_book(id)
-    print("deleted book")
-    rewrite_json(library)
+    try:
+        library = get_library().delete_book(id)
+        rewrite_json(library)
+        print("Book has been deleted")
+    except BookDoesntExistError as e:
+        print(e)
 
 
 # PATCH
@@ -77,7 +85,7 @@ def change_status():
     rewrite_json(library)
 
 
-#SEARCH
+# SEARCH
 def search_book():
     pattern = input("Search: ")
     selected = get_library().search_book(pattern)
