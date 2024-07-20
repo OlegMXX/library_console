@@ -22,8 +22,9 @@ def get_library():
 
 def rewrite_json(library):
     to_json = []
-    for book_object in library.get_books():
+    for book_object in library.get_books(all_books=True):
         to_json.append(book_object.__dict__)
+    print(to_json)
 
     with open(DB_PATH, 'w') as f:
         f.write(json.dumps(to_json, ensure_ascii=False))
@@ -65,7 +66,7 @@ def post_book():
 def delete_book():
     id = int(input("ID: "))
     library = get_library().delete_book(id)
-
+    print("deleted book")
     rewrite_json(library)
 
 

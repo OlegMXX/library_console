@@ -1,4 +1,4 @@
-from service.variables import DB_PATH, AVAILABLE, IS_GIVEN
+from service.variables import DB_PATH, AVAILABLE, IS_GIVEN, DELETED
 
 class Book():
     def __init__(self, id, title, author, year, status):
@@ -19,3 +19,6 @@ class Book():
             self.status = IS_GIVEN
         else:
             self.status = AVAILABLE
+
+    def mark_as_deleted(self):
+        self.status = DELETED

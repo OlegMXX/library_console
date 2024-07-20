@@ -1,16 +1,21 @@
-import json
 import re
-
+from service.variables import DELETED
 
 class Library:
     def __init__(self, books):
         self.books = books
 
-    def get_books(self):
+    def get_books(self, all_books=False):
         """
-        Функция возвращает свой атрибут books в виде списка объектов Books
+        Функция возвращает свой атрибут books в виде списка объектов Books, не отображая удаленные
         """
-        return self.books
+        res = []
+        if all_books:
+            res = self.books
+        else:
+            res = [book for book in self.books if book.status != DELETED]
+
+        return res
 
     def get_last_id(self):
         """
@@ -35,7 +40,7 @@ class Library:
         return res
 
     def delete_book(self, book_id):
-        self.books.pop(self.get_book_ind(book_id))
+        self.books[self.get_book_ind(book_id)].mark_as_deleted()
         return self
 
     def change_status(self, book_id):
