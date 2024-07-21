@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.append(os.path.join(os.getcwd(), '..'))
+
 from library_console.service.utils import print_all, post_book, delete_book, change_status, search_book
 
 
@@ -25,8 +30,12 @@ def user_interface():
             search_book()
             continue
         if command == "help":
-            print("Library help")
-
+            print("'quit' - quit library\n"
+                  "'list' - open the catalog\n"
+                  "'add' - add a book in the library\n"
+                  "'delete' - delete a book from the library by id\n"
+                  "'change status' - change status of a book by id\n"
+                  "'search' - search a book by title, author or year\n")
         else:
             print("Unknown command")
 
