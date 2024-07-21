@@ -22,7 +22,10 @@ class Library:
         Функция находит максимальный атрибут id в объектах Book в атрибуте books и возвращает его.
         Можно было по длине списка + 1, но надо же показать перегрузку методов класса Book.
         """
-        max_id = max(self.books).id
+        try:
+            max_id = max(self.books).id
+        except ValueError:
+            max_id = 0
         return max_id
 
 

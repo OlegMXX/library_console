@@ -1,24 +1,40 @@
 import json
 from library_console.data.book import Book
 from library_console.data.library import Library
-from service.variables import DB_PATH, AVAILABLE, IS_GIVEN
+from service.variables import DB_PATH, AVAILABLE, IS_GIVEN, DELETED
 from errors.errors import BookDoesntExistError, IncorrectYearError
 
 
 # COMMON
+
+def init_db():
+    to_json = []
+    with open(DB_PATH, 'w') as f:
+        f.write(json.dumps(to_json, ensure_ascii=False))
+
+
 def get_books_from_json():
-    with open(DB_PATH) as f:
-        book_list_of_dicts = json.loads(f.read())
-        return book_list_of_dicts
+    try:
+        with open(DB_PATH) as f:
+            book_list_of_dicts = json.loads(f.read())
+            return book_list_of_dicts
+    except FileNotFoundError as e:
+        init_db()
+
+
 
 
 def get_library():
     book_list_of_objects = []
-    book_list_of_dicts = get_books_from_json()
-    for book_dict in book_list_of_dicts:
-        book_list_of_objects.append(Book(**book_dict))
-    library = Library(book_list_of_objects)
-    return library
+    try:
+        book_list_of_dicts = get_books_from_json()
+        for book_dict in book_list_of_dicts:
+            book_list_of_objects.append(Book(**book_dict))
+        library = Library(book_list_of_objects)
+    except TypeError:
+        library = Library([Book(0, "-", "-", 1988, DELETED)])
+    finally:
+        return library
 
 
 def rewrite_json(library):
@@ -37,11 +53,11 @@ def print_all():
 
 # GET
 def print_selected(selected):
-    print("{:<6} | {:<40} | {:<20} | {:<8} | {:<10}".format('id', 'title', 'author', 'year', 'status'))
-    print("-"*93)
+    print("{:<6} | {:<50} | {:<35} | {:<8} | {:<10}".format('id', 'title', 'author', 'year', 'status'))
+    print("-"*140)
     for book_object in selected:
         book_dict = book_object.__dict__
-        print("{:<6} | {:<40} | {:<20} | {:<8} | {:<10}".format(*book_dict.values()))
+        print("{:<6} | {:<50} | {:<35} | {:<8} | {:<10}".format(*book_dict.values()))
 
 
 # POST
