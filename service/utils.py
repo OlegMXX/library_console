@@ -2,8 +2,8 @@
 # выводят результаты операций в консоль
 
 import json
-from library_console.data.book import Book
-from library_console.data.library import Library
+from data.book import Book
+from data.library import Library
 from service.variables import DB_PATH, AVAILABLE, IS_GIVEN, DELETED
 from errors.errors import BookDoesntExistError, IncorrectYearError
 
@@ -13,7 +13,7 @@ from errors.errors import BookDoesntExistError, IncorrectYearError
 def init_db():
     """Зоздает json файл по заданному пути, помещая в него пустой список"""
     to_json = []
-    with open(DB_PATH, 'w') as f:
+    with open(DB_PATH, 'w', encoding='utf8') as f:
         f.write(json.dumps(to_json, ensure_ascii=False))
 
 
@@ -57,7 +57,7 @@ def rewrite_json(library):
     for book_object in library.get_books(all_books=True):
         to_json.append(book_object.__dict__)
 
-    with open(DB_PATH, 'w') as f:
+    with open(DB_PATH, 'w', encoding='utf8') as f:
         f.write(json.dumps(to_json, ensure_ascii=False))
 
 

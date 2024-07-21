@@ -1,9 +1,4 @@
-import sys
-import os
-
-sys.path.append(os.path.join(os.getcwd(), '..'))
-
-from library_console.service.utils import print_all, post_book, delete_book, change_status, search_book
+from service.utils import print_all, post_book, delete_book, change_status, search_book
 
 
 def user_interface():
