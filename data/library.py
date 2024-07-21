@@ -75,9 +75,10 @@ class Library:
         """
         selected = []
         for book in self.books:
-            if (re.search(pattern.lower(), book.title.lower()) or
+            if (book.status != DELETED and
+                    (re.search(pattern.lower(), book.title.lower()) or
                     re.search(pattern.lower(), book.author.lower()) or
-                    re.search(pattern, book.year)):
+                    re.search(pattern, str(book.year)))):
                 selected.append(book)
         return selected
 
