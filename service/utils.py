@@ -1,3 +1,6 @@
+# Ключевые функции приложения, запускающие создание, удаление и манипуляцию объектами,
+# выводят результаты операций в консоль
+
 import json
 from library_console.data.book import Book
 from library_console.data.library import Library
@@ -8,23 +11,32 @@ from errors.errors import BookDoesntExistError, IncorrectYearError
 # COMMON
 
 def init_db():
+    """Зоздает json файл по заданному пути, помещая в него пустой список"""
     to_json = []
     with open(DB_PATH, 'w') as f:
         f.write(json.dumps(to_json, ensure_ascii=False))
 
 
 def get_books_from_json():
+    """
+    Читает json файл по заданному пути, возвращает список словарей из файла.
+    В случае отсутствия файла, запускает функцию его создания.
+    """
     try:
         with open(DB_PATH) as f:
             book_list_of_dicts = json.loads(f.read())
             return book_list_of_dicts
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         init_db()
 
 
-
-
 def get_library():
+    """
+    Создает и возвращает объект класса Library с заполненным атрибутом books (объекты создаются из данных в json).
+    Если json был пуст или не существовал, возвращает объект класса Library с маркерным атрибутом books.
+
+    Использование функции не предполагает сохранение данных маркерного объекта Book в json ни при каких обстоятельствах.
+    """
     book_list_of_objects = []
     try:
         book_list_of_dicts = get_books_from_json()
@@ -38,6 +50,9 @@ def get_library():
 
 
 def rewrite_json(library):
+    """
+    Функция перезаписи данных текущего состояния объекта Library в json
+    """
     to_json = []
     for book_object in library.get_books(all_books=True):
         to_json.append(book_object.__dict__)
@@ -47,12 +62,14 @@ def rewrite_json(library):
 
 
 def print_all():
+    """Создает список объектов класса Book, передает его на функцию вывода"""
     selected = get_library().get_books()
     print_selected(selected)
 
 
 # GET
 def print_selected(selected):
+    """Функция вывода в консоль атрибутов объектов класса Book из переданного списка"""
     print("{:<6} | {:<50} | {:<35} | {:<8} | {:<10}".format('id', 'title', 'author', 'year', 'status'))
     print("-"*140)
     for book_object in selected:
@@ -61,8 +78,12 @@ def print_selected(selected):
 
 
 # POST
-
 def post_book():
+    """
+    Функция собирающая у пользователя значения атрибутов и создающая объект класса Book.
+    Добавляет этот объект в атрибут books экземпляра класса Library.
+    Запускает сохранение данных из обновленного экземпляра Library в json.
+    """
     id = get_library().get_last_id() + 1
     title = input("Title: ")
     author = input("Author: ")
@@ -85,6 +106,7 @@ def post_book():
 
 # DELETE
 def delete_book():
+    """Принимает id экземпляра класса Book, запускает метод по маркировке книги как удаленной (DELETED)."""
     id = int(input("ID: "))
     try:
         library = get_library().delete_book(id)
@@ -96,6 +118,7 @@ def delete_book():
 
 # PATCH
 def change_status():
+    """Принимает id экземпляра класса Book, запускает метод по смене атрибута status (на AVIALABLE/IS_GIVEN)."""
     id = int(input("ID: "))
     library = get_library().change_status(id)
     rewrite_json(library)
@@ -103,6 +126,7 @@ def change_status():
 
 # SEARCH
 def search_book():
+    """Принимает паттерн поиска, запускает метод поиска, возвращает список объектов Book, подходящие к паттерну."""
     pattern = input("Search: ")
     selected = get_library().search_book(pattern)
     print_selected(selected)
