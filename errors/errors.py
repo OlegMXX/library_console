@@ -7,4 +7,4 @@ class IncorrectYearError(Exception):
 class BookDoesntExistError(Exception):
     """Исключение - запрашиваемой по ID книги нет в библиотеке """
     def __str__(self):
-        return f'The book you are trying to delete is not exist'
+        return f'The book you are trying to delete or change status is not exist'
