@@ -120,8 +120,12 @@ def delete_book():
 def change_status():
     """Принимает id экземпляра класса Book, запускает метод по смене атрибута status (на AVIALABLE/IS_GIVEN)."""
     id = int(input("ID: "))
-    library = get_library().change_status(id)
-    rewrite_json(library)
+    try:
+        library = get_library().change_status(id)
+        rewrite_json(library)
+        print("Book status has been changed")
+    except BookDoesntExistError as e:
+        print(e)
 
 
 # SEARCH

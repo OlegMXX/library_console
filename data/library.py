@@ -65,8 +65,12 @@ class Library:
         Ищет объект Book в атрибуте books и запускает у него функцию смены статуса на AVAILABLE/IS_GIVEN.
         Возвращает объект Library с новыми данными
         """
-        self.books[self.get_book_ind(book_id)].change_status()
-        return self
+
+        if book_id in self.get_list_of_ids():
+            self.books[self.get_book_ind(book_id)].change_status()
+            return self
+        else:
+            raise BookDoesntExistError
 
     def search_book(self, pattern):
         """
